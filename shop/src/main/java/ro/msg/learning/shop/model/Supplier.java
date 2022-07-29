@@ -1,15 +1,16 @@
-package ro.msg.learning.shop.Model;
+package ro.msg.learning.shop.model;
 
 import lombok.*;
 
 import javax.persistence.Entity;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Builder
 public class Supplier extends BaseEntity{
     private String name;
 }

@@ -1,18 +1,21 @@
-package ro.msg.learning.shop.Model;
+package ro.msg.learning.shop.model;
 
 import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Builder
+
 public class Product extends BaseEntity{
     private String name;
     private String description;
@@ -22,5 +25,5 @@ public class Product extends BaseEntity{
     private ProductCategory category;
     @ManyToOne(fetch = FetchType.EAGER)
     private Supplier supplier;
-    private String ImageUrl;
+    private String imageUrl;
 }

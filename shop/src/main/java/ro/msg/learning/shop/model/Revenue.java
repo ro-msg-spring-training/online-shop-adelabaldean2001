@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.Model;
+package ro.msg.learning.shop.model;
 
 import lombok.*;
 
@@ -8,12 +8,12 @@ import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class Revenue extends BaseEntity{
     @ManyToOne(fetch = FetchType.EAGER)
     private Location location;

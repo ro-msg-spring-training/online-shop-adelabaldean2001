@@ -1,15 +1,19 @@
-package ro.msg.learning.shop.Model;
+package ro.msg.learning.shop.model;
 
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Builder
 public class ProductCategory extends BaseEntity{
     private String name;
     private String description;

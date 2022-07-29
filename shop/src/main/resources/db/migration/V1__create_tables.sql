@@ -1,8 +1,71 @@
-CREATE TABLE product_category (
-    id integer ,
-    name varchar(255) not null,
-    description varchar(255),
-    primary key (id)
+CREATE TABLE IF NOT EXISTS product_category (
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name NVARCHAR(100) NOT NULL,
+    description NVARCHAR(100) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS supplier (
+   id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   name NVARCHAR(100) NOT NULL
+);
 
+CREATE TABLE IF NOT EXISTS customer (
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    first_name NVARCHAR(100) NOT NULL,
+    last_name NVARCHAR(100) NOT NULL,
+    username NVARCHAR(100) NOT NULL,
+    password NVARCHAR(100) NOT NULL,
+    email NVARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS product (
+   id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   name NVARCHAR(100) NOT NULL,
+   description NVARCHAR(255) NOT NULL,
+   price NUMERIC NOT NULL,
+   weight DOUBLE PRECISION NOT NULL,
+   category_id INTEGER NOT NULL REFERENCES product_category(id),
+   supplier_id INTEGER NOT NULL REFERENCES supplier(id),
+   image_url NVARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS location (
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name NVARCHAR(100) NOT NULL,
+    address_country NVARCHAR(100) NOT NULL,
+    address_city NVARCHAR(100) NOT NULL,
+    address_county NVARCHAR(100) NOT NULL,
+    address_street_address NVARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS stock (
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES product(id),
+    location_id INTEGER NOT NULL REFERENCES location(id),
+    quantity INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS orderP (
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    shipped_from_id INTEGER NOT NULL REFERENCES location(id),
+    customer_id INTEGER NOT NULL REFERENCES customer(id),
+    created_at DATE NOT NULL,
+    address_country NVARCHAR(100) NOT NULL,
+    address_city NVARCHAR(100) NOT NULL,
+    address_county NVARCHAR(100) NOT NULL,
+    address_street_address NVARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS order_detail (
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    orderP_id INTEGER NOT NULL REFERENCES orderP(id),
+    product_id INTEGER NOT NULL REFERENCES product(id),
+    quantity INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS revenue (
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    location_id INTEGER NOT NULL REFERENCES location(id),
+    date DATETIME NOT NULL,
+    sum NUMERIC NOT NULL
+);

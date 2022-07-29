@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.Model;
+package ro.msg.learning.shop.model;
 
 import lombok.*;
 
@@ -7,12 +7,12 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class Order extends BaseEntity{
     @ManyToOne(fetch = FetchType.EAGER)
     private Location shippedFrom;

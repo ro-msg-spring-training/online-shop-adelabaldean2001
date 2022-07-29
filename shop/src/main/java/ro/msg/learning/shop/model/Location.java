@@ -1,19 +1,24 @@
-package ro.msg.learning.shop.Model;
+package ro.msg.learning.shop.model;
 
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class Location extends BaseEntity{
     private String name;
     private String addressCountry;
     private String addressCity;
     private String addressCounty;
     private String addressStreetAddress;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Stock> stocks;
 }

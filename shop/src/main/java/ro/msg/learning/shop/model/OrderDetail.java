@@ -1,18 +1,18 @@
-package ro.msg.learning.shop.Model;
+package ro.msg.learning.shop.model;
 
-import javafx.beans.NamedArg;
 import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Builder
 public class OrderDetail extends BaseEntity{
     @ManyToOne(fetch = FetchType.EAGER)
     private Order order;
