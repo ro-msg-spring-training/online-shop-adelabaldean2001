@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -19,6 +20,5 @@ public class Location extends BaseEntity{
     private String addressCity;
     private String addressCounty;
     private String addressStreetAddress;
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<Stock> stocks;
+
 }

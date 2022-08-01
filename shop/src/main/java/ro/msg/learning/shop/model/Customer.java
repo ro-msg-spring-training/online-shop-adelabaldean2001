@@ -2,6 +2,7 @@ package ro.msg.learning.shop.model;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Getter
@@ -15,5 +16,6 @@ public class Customer extends BaseEntity{
     private String lastName;
     private String username;
     private String password;
+    @Column(name = "email")
     private String emailAddress;
 }

@@ -2,9 +2,7 @@ package ro.msg.learning.shop.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -15,6 +13,7 @@ import javax.persistence.ManyToOne;
 @Builder
 public class OrderDetail extends BaseEntity{
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "orderp_id")
     private Order order;
     @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
