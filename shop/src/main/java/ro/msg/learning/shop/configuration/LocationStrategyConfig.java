@@ -4,19 +4,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ro.msg.learning.shop.service.strategy.LocationStrategy;
+import ro.msg.learning.shop.service.strategy.MostAbundantLocationStrategy;
 import ro.msg.learning.shop.service.strategy.SingleLocationStrategy;
 
 @Configuration
-public class ClassConfig {
+public class LocationStrategyConfig {
 
     @Bean
-    public LocationStrategy chooseStrategy(@Value("${strategy}")String s) throws Exception {
+    public LocationStrategy chooseStrategy(@Value("${strategy}")String s) {
         if(s.equals("SingleLocationStrategy")){
             return new SingleLocationStrategy();
         }
-//        else if(s.equals("MostAbundantStrategy")){
-//            return new MostAbundantStrategy();
-//        }
+        else if(s.equals("MostAbundantLocationStrategy")){
+            return new MostAbundantLocationStrategy();
+        }
         else{
             throw new RuntimeException("Invalid Strategy");
         }
