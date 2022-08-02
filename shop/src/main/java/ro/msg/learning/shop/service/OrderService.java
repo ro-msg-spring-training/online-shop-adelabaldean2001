@@ -1,12 +1,11 @@
 package ro.msg.learning.shop.service;
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.service.spi.ServiceException;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.DTO.OrderDTO;
-import ro.msg.learning.shop.DTO.OrderedProductDTO;
+import ro.msg.learning.shop.model.OrderedProduct;
 import ro.msg.learning.shop.exception.LocationNotFound;
 import ro.msg.learning.shop.exception.OrderCannotBeCompleted;
 import ro.msg.learning.shop.model.*;
@@ -22,15 +21,16 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final StockRepository stockRepository;
-    private final CustomerRepository customerRepository;
-    private final OrderDetailRepository orderDetailRepository;
-    private final ProductRepository productRepository;
+    private final StockService stockService;
+    private final CustomerService customerService;
+    private final OrderDetailService orderDetailService;
+    private final ProductService productService;
     private final LocationStrategy locationStrategy;
     private final ModelMapper modelMapper;
 
     public Order mapToEntity(OrderDTO orderDTO){
         Order order = modelMapper.map(orderDTO,Order.class);
+        order.setProducts(orderDTO.getProducts());
         return order;
     }
 
@@ -43,20 +43,19 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public Order createOrder(Integer customerID, OrderDTO orderDTO) {
-        orderDTO.setCreatedAt(LocalDateTime.now());
+    public Order createOrder(Integer customerID, Order order) {
+        order.setCreatedAt(LocalDateTime.now());
 
-        List<Stock> stocks = findLocationStrategy(orderDTO);
+        List<Stock> stocks = findLocationStrategy(order);
 
         Random rand = new Random();
         Stock stock = stocks.get(rand.nextInt(stocks.size()));
 
-        Customer customer = customerRepository.findById(customerID).get();
+        Customer customer = customerService.getCustomerById(customerID);
         Long orderSizeInitial = orderRepository.count();
 
-        List<OrderedProductDTO> products = productsList(orderDTO);
+        List<OrderedProduct> products = productsList(order);
 
-        Order order = this.mapToEntity(orderDTO);
         order.setShippedFrom(stock.getLocation());
         order.setCustomer(customer);
         orderRepository.save(order);
@@ -66,35 +65,35 @@ public class OrderService {
         if (orderSizeInitial.equals(orderSizeFinal))
             throw new OrderCannotBeCompleted();
 
-        for(OrderedProductDTO orderedProductDTO: products) {
-           if (orderedProductDTO.getId().equals(stock.getProduct().getId())) {
-               stock.setQuantity(stock.getQuantity() - orderedProductDTO.getQuantity());
-               stockRepository.save(stock);
+        for(OrderedProduct orderedProduct: products) {
+            if (orderedProduct.getId().equals(stock.getProduct().getId())) {
+                stock.setQuantity(stock.getQuantity() - orderedProduct.getQuantity());
+                stockService.createStock(stock);
 
-               OrderDetail orderDetail = new OrderDetail(order, stock.getProduct(), orderedProductDTO.getQuantity());
-               orderDetailRepository.save(orderDetail);
-               break;
-           }
+                OrderDetail orderDetail = new OrderDetail(order, stock.getProduct(), orderedProduct.getQuantity());
+                orderDetailService.createOrderDetail(orderDetail);
+                break;
+            }
         }
         return order;
     }
 
-    private List<OrderedProductDTO> productsList(OrderDTO orderDTO) {
-        List<OrderedProductDTO> orderedProducts = new ArrayList<>();
+    private List<OrderedProduct> productsList(Order order) {
+        List<OrderedProduct> orderedProducts = new ArrayList<>();
 
-        orderDTO.getProducts().forEach((productId, quantity) -> {
-            Product product = productRepository.findById(productId).orElseThrow(() -> new ServiceException("Invalid product id"));
-            OrderedProductDTO orderedProductDTO = OrderedProductDTO.builder()
+        order.getProducts().forEach((productId, quantity) -> {
+            Product product = productService.getProductById(productId);
+            OrderedProduct orderedProduct = OrderedProduct.builder()
                     .id(product.getId())
                     .quantity(quantity)
                     .build();
-            orderedProducts.add(orderedProductDTO);
+            orderedProducts.add(orderedProduct);
         });
         return orderedProducts;
     }
 
-    private List<Stock> findLocationStrategy(OrderDTO orderDTO) {
-        List<OrderedProductDTO> products = productsList(orderDTO);
+    private List<Stock> findLocationStrategy(Order order) {
+        List<OrderedProduct> products = productsList(order);
         List<Stock> stocks = locationStrategy.findBestLocations(products);
 
         if (stocks == null || stocks.isEmpty())

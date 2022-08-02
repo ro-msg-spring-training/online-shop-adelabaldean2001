@@ -6,9 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.DTO.ProductCategoryDTO;
 import ro.msg.learning.shop.model.Product;
-import ro.msg.learning.shop.repository.ProductCategoryRepository;
 import ro.msg.learning.shop.repository.ProductRepository;
-import ro.msg.learning.shop.repository.SupplierRepository;
 
 import java.util.List;
 
@@ -16,8 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final ProductCategoryRepository productCategoryRepository;
-    private final SupplierRepository supplierRepository;
+    private final ProductCategoryService productCategoryService;
+    private final SupplierService supplierService;
     private final ModelMapper modelMapper;
 
     public ProductCategoryDTO mapToDTO(Product product){
@@ -40,23 +38,16 @@ public class ProductService {
     }
 
     public void createProduct(ProductCategoryDTO productCategoryDTO){
-        productCategoryRepository.findById(productCategoryDTO.getProductCategoryId())
-                .orElseThrow(() -> new ServiceException("Invalid product category id"));
-
-        supplierRepository.findById(productCategoryDTO.getSupplierId())
-                .orElseThrow(() -> new ServiceException("Invalid supplier id"));
+        productCategoryService.getProductCategoryById(productCategoryDTO.getProductCategoryId());
+        supplierService.getSupplierById(productCategoryDTO.getSupplierId());
 
         Product product = this.mapToEntity(productCategoryDTO);
         productRepository.save(product);
     }
 
     public void updateProduct(Integer id, ProductCategoryDTO productCategoryDTO){
-        productCategoryRepository.findById(productCategoryDTO.getProductCategoryId())
-                .orElseThrow(() -> new ServiceException("Invalid product category id"));
-
-
-        supplierRepository.findById(productCategoryDTO.getSupplierId())
-                .orElseThrow(() -> new ServiceException("Invalid supplier id"));
+        productCategoryService.getProductCategoryById(productCategoryDTO.getProductCategoryId());
+        supplierService.getSupplierById(productCategoryDTO.getSupplierId());
 
         productRepository.findById(id)
                 .orElseThrow(() -> new ServiceException("Invalid product id"));

@@ -1,7 +1,7 @@
 package ro.msg.learning.shop.service.strategy;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import ro.msg.learning.shop.DTO.OrderedProductDTO;
+import ro.msg.learning.shop.model.OrderedProduct;
 import ro.msg.learning.shop.model.*;
 import ro.msg.learning.shop.repository.StockRepository;
 
@@ -14,7 +14,7 @@ public class SingleLocationStrategy implements LocationStrategy{
     StockRepository stockRepository;
 
     @Override
-    public List<Stock> findBestLocations(List<OrderedProductDTO> listOfOrderedProducts){
+    public List<Stock> findBestLocations(List<OrderedProduct> listOfOrderedProducts){
         List<Stock> stocks = stockRepository.findAll();
         Map<Integer, List<Stock>> locationList = new HashMap<>();
 

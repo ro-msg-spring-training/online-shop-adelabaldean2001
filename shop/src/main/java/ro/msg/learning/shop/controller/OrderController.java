@@ -16,8 +16,9 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/{customerID}")
-    private Order createOrder(@PathVariable Integer customerID, @RequestBody OrderDTO orderDTO) throws Exception {
-        return orderService.createOrder(customerID, orderDTO);
+    private OrderDTO createOrder(@PathVariable Integer customerID, @RequestBody OrderDTO orderDTO) {
+        Order order = orderService.mapToEntity(orderDTO);
+        return orderService.mapToDTO(orderService.createOrder(customerID, order));
     }
 
     @GetMapping("/get")

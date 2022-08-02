@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.DTO;
+package ro.msg.learning.shop.model;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderedProductDTO {
+public class OrderedProduct {
     private Integer id;
     private Integer quantity;
 }

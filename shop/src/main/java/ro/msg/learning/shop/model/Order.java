@@ -2,11 +2,9 @@ package ro.msg.learning.shop.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -25,4 +23,6 @@ public class Order extends BaseEntity{
     private String addressCity;
     private String addressCounty;
     private String addressStreetAddress;
+    @Transient
+    private Map<Integer,Integer> products;
 }
