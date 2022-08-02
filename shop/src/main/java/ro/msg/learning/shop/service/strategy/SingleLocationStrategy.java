@@ -1,29 +1,17 @@
 package ro.msg.learning.shop.service.strategy;
 
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import ro.msg.learning.shop.DTO.OrderDTO;
 import ro.msg.learning.shop.DTO.OrderedProductDTO;
-import ro.msg.learning.shop.exception.OrderCannotBeCompleted;
 import ro.msg.learning.shop.model.*;
-import ro.msg.learning.shop.repository.CustomerRepository;
-import ro.msg.learning.shop.repository.ProductRepository;
 import ro.msg.learning.shop.repository.StockRepository;
-import ro.msg.learning.shop.service.OrderService;
 
 import javax.transaction.Transactional;
 import java.util.*;
 
 @Transactional
 public class SingleLocationStrategy implements LocationStrategy{
-
-
     @Autowired
     StockRepository stockRepository;
-    @Autowired
-    CustomerRepository customerRepository;
-    @Autowired
-    ProductRepository productRepository;
 
     @Override
     public List<Stock> findBestLocations(List<OrderedProductDTO> listOfOrderedProducts){
@@ -53,9 +41,6 @@ public class SingleLocationStrategy implements LocationStrategy{
                 break;
             }
         }
-
         return singleLocationStocks;
     }
-
-
 }

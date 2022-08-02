@@ -3,10 +3,8 @@ package ro.msg.learning.shop.DTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ro.msg.learning.shop.model.Product;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 
 @NoArgsConstructor

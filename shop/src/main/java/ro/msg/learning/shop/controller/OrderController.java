@@ -1,24 +1,30 @@
 package ro.msg.learning.shop.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ro.msg.learning.shop.DTO.OrderDTO;
 import ro.msg.learning.shop.model.Order;
 import ro.msg.learning.shop.service.OrderService;
 
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/orders")
 public class OrderController {
+    private final OrderService orderService;
 
-    @Autowired
-    private OrderService orderService;
-
-    @PostMapping("/orders/{customerID}")
-    private Order createOrder(@PathVariable Integer customerID, @RequestBody OrderDTO newOrder) throws Exception {
-        newOrder.setCreatedAt(LocalDateTime.now().withNano(0));
-        return orderService.createOrder(customerID, newOrder);
+    @PostMapping("/{customerID}")
+    private Order createOrder(@PathVariable Integer customerID, @RequestBody OrderDTO orderDTO) throws Exception {
+        return orderService.createOrder(customerID, orderDTO);
     }
-    
+
+    @GetMapping("/get")
+    public List<OrderDTO> getAllOrders(){
+        return orderService.getAllOrders()
+                .stream()
+                .map(this.orderService::mapToDTO)
+                .collect(Collectors.toList());
+    }
 }

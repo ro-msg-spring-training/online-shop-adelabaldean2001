@@ -1,8 +1,8 @@
 package ro.msg.learning.shop.service;
 
+import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.DTO.ProductCategoryDTO;
 import ro.msg.learning.shop.model.Product;
@@ -11,24 +11,14 @@ import ro.msg.learning.shop.repository.ProductRepository;
 import ro.msg.learning.shop.repository.SupplierRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
-    @Autowired
-    ProductRepository productRepository;
-    @Autowired
-    ProductCategoryRepository productCategoryRepository;
-    @Autowired
-    SupplierRepository supplierRepository;
-
-
+    private final ProductRepository productRepository;
+    private final ProductCategoryRepository productCategoryRepository;
+    private final SupplierRepository supplierRepository;
     private final ModelMapper modelMapper;
-
-    public ProductService(ProductRepository productRepository, ModelMapper modelMapper) {
-        this.productRepository = productRepository;
-        this.modelMapper = modelMapper;
-    }
 
     public ProductCategoryDTO mapToDTO(Product product){
         ProductCategoryDTO productCategoryDTO = modelMapper.map(product,ProductCategoryDTO.class);
@@ -44,9 +34,9 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Optional<Product> getProductById(Integer id){
-        return Optional.ofNullable(productRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("Invalid product id")));
+    public Product getProductById(Integer id){
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ServiceException("Invalid product id"));
     }
 
     public void createProduct(ProductCategoryDTO productCategoryDTO){
