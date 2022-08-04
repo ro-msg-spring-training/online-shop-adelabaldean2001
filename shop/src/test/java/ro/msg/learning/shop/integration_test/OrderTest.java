@@ -95,5 +95,4 @@ public class OrderTest {
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         mvcResult.getResponse().getStatus();
     }
-
 }
