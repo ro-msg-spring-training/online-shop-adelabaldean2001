@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Customer extends BaseEntity{
     private String firstName;
     private String lastName;
@@ -18,4 +19,5 @@ public class Customer extends BaseEntity{
     private String password;
     @Column(name = "email")
     private String emailAddress;
+
 }
